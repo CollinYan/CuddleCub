@@ -130,7 +130,8 @@ void musicOn(long counter, long startDelay, long endTime, boolean command) {
   if (counter == startDelay) {
     Serial.println(F("Playing music"));
     myDFPlayer.playMp3Folder(musicIndex);
-    //myDFPlayer.play(musicIndex);
+    Serial.println(F("Playing music@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+    myDFPlayer.play(musicIndex);
   } else if (counter == songTime && counter != endTime) {
     myDFPlayer.playMp3Folder(musicIndex);
   }
@@ -164,6 +165,10 @@ void SDtoBLE() {
   myFile = SD.open("data.txt", FILE_READ);
   if (!myFile) {
     Serial.println(F("ERROR: File does not exist on SD card"));
+  }
+  else
+  {
+  Serial.println(F("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));  
   }
   while (myFile.available()) {
     //Serial.println("sending data");
@@ -320,17 +325,20 @@ void loop() {
       //Serial.println("test");
       String indicator = (String) c[0];
       //Serial.println(indicator);
-  
-      if (indicator.equals("m") ) {
+      int asdf = 0;
+      if (/*indicator.equals("m") */true) {
       //Serial.println(F("music if statement"));
       parseCommand(c, csize, "m");
-        if ((String) c[2] == "o" && (String) c[3] == "n") {
+        if (/*(String) c[2] == "o" && (String) c[3] == "n"*/true) {
           onm = 1;
         } else {
           onm = -1;
         }
-        musicCounter = 0;
-    } else if (indicator.equals("l")) {
+        if (asdf == 0)
+        {musicCounter = 0;
+        asdf++;}
+    } 
+    if (indicator.equals("l")) {
         parseCommand(c, csize, "l");
         if ((String) c[2] == "o" && (String) c[3] == "n") {
           on = 1;
@@ -361,10 +369,10 @@ void loop() {
   } 
 
   if (onm == 1) {
-    musicOn(musicCounter , musicStartDelay, musicEnd,false);
+    musicOn(musicCounter , /*musicStartDelay*/60000, 1,false);
     musicCounter += 1000;
   } else if (onm == -1) {
-    musicOff(musicCounter, musicStartDelay , musicIndex,false);
+    musicOff(musicCounter, /*musicStartDelay*/60000 , 1,false);
     musicCounter += 1000;
   }
 
