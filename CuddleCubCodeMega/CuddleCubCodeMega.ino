@@ -369,10 +369,10 @@ void loop() {
   } 
 
   if (onm == 1) {
-    musicOn(musicCounter , /*musicStartDelay*/60000, 1,false);
+    musicOn(musicCounter , /*musicStartDelay*/60000, /*musicIndex*/1,false);
     musicCounter += 1000;
   } else if (onm == -1) {
-    musicOff(musicCounter, /*musicStartDelay*/60000 , 1,false);
+    musicOff(musicCounter, /*musicStartDelay*/60000 , /*musicIndex*/1,false);
     musicCounter += 1000;
   }
 
