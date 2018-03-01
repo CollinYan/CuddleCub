@@ -130,6 +130,7 @@ void musicOn(long counter, long startDelay, long endTime, boolean command) {
   if (counter == startDelay) {
     Serial.println(F("Playing music"));
     myDFPlayer.playMp3Folder(musicIndex);
+    Serial.println(musicIndex);
     Serial.println(F("Playing music@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
     myDFPlayer.play(musicIndex);
   } else if (counter == songTime && counter != endTime) {
@@ -326,10 +327,13 @@ void loop() {
       String indicator = (String) c[0];
       //Serial.println(indicator);
       int asdf = 0;
-      if (/*indicator.equals("m") */true) {
+      Serial.println(indicator);
+      if (indicator.equals("m")) {
       //Serial.println(F("music if statement"));
       parseCommand(c, csize, "m");
-        if (/*(String) c[2] == "o" && (String) c[3] == "n"*/true) {
+        if ((String) c[2] == "o" && (String) c[3] == "n") {
+          Serial.println(c[2]); 
+          Serial.println(c[3]);
           onm = 1;
         } else {
           onm = -1;
@@ -369,10 +373,14 @@ void loop() {
   } 
 
   if (onm == 1) {
-    musicOn(musicCounter , /*musicStartDelay*/60000, /*musicIndex*/1,false);
+    Serial.println(musicStartDelay);
+    Serial.println(musicIndex);
+    Serial.println(F("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+    musicOn(musicCounter , musicStartDelay, musicIndex,false);
     musicCounter += 1000;
   } else if (onm == -1) {
-    musicOff(musicCounter, /*musicStartDelay*/60000 , /*musicIndex*/1,false);
+    Serial.println(musicStartDelay);
+    musicOff(musicCounter, musicStartDelay, musicIndex,false);
     musicCounter += 1000;
   }
 
