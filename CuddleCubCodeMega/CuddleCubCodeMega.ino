@@ -80,20 +80,20 @@ void parseCommand(char c[], int csize, String decider) {
   }
   if (decider.equals("l")) {
     if (on != 1){
-      lightStartDelay = (long) (ld.toInt()*60*1000);
+      lightStartDelay = -(long) (ld.toInt());
     } else if ((String) c[2] == "o" && (String) c[3] == "f"){
-      lightStartDelay = (long) (ld.toInt()*60*1000);
+      lightStartDelay = -(long) (ld.toInt());
     }
      
   } else if (decider.equals("r")) {
    
-    recordStartDelay = (long) (ld.toInt()*60*1000);
+    recordStartDelay = -(long) (ld.toInt());
     
   } else if (decider.equals("m") ) {
     if (onm != 1){
-    musicStartDelay = (long) (ld.toInt()*60*1000);
+    musicStartDelay = -(long) (ld.toInt());
     } else if ((String) c[2] == "o" && (String) c[3] == "f"){
-      musicStartDelay = (long) (ld.toInt()*60*1000);
+      musicStartDelay = -(long) (ld.toInt());
     }
     }
     
@@ -109,22 +109,22 @@ void parseCommand(char c[], int csize, String decider) {
   }
   if (decider.equals("l")) {
     color = c[index];
-    lightEnd = (long) (ld.toInt()*60*1000);
+    lightEnd = -(long) (ld.toInt())+60;
     
   } else if (decider.equals("r")) {
    
-    recordEnd = (long) (ld.toInt()*60*1000);
+    recordEnd = -(long) (ld.toInt())+60;
    
   } else if (decider.equals("m")) {
       String musicIndexString;
       musicIndexString += c[index];
       musicIndex = musicIndexString.toInt();
-      musicEnd = (long) (ld.toInt()*60*1000);
+      musicEnd = -(long) (ld.toInt())+60;
    
   }
 }
 
-void musicOn(long counter, long startDelay, long endTime, boolean command) {
+void musicOn(long counter, long startDelay, long musicIndex, long endTime, boolean command) {
   //Serial.println(F("Music on function"));
   //printDetail(myDFPlayer.readType(), myDFPlayer.read());
   if (counter == startDelay) {
@@ -376,31 +376,31 @@ void loop() {
     Serial.println(musicStartDelay);
     Serial.println(musicIndex);
     Serial.println(F("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
-    musicOn(musicCounter , musicStartDelay, musicIndex,false);
-    musicCounter += 1000;
-  } else if (onm == -1) {
+    musicOn(musicCounter , musicStartDelay, musicIndex,musicEnd,false);
+    musicCounter += 1;
+  } else if (onm <= -1) {
     Serial.println(musicStartDelay);
     musicOff(musicCounter, musicStartDelay, musicIndex,false);
-    musicCounter += 1000;
+    musicCounter += 1;
   }
 
 
   if (on == 1) {
     lightsOn(lightsCounter,lightStartDelay, lightEnd, color,false);
-    lightsCounter += 1000;
-  } else if (on == -1) {
+    lightsCounter += 1;
+  } else if (on <= -1) {
     lightsOff(lightsCounter, lightStartDelay, color,false);
-    lightsCounter += 1000;
+    lightsCounter += 1;
   }
   
 
   
   if (onr == 1) {
     recordOn(recordCounter, recordStartDelay, recordEnd,false);
-    recordCounter += 1000;
-  } else if (onr == -1) {
+    recordCounter += 1;
+  } else if (onr <= -1) {
     recordOff(recordCounter, recordStartDelay, recordEnd,false);
-    recordCounter += 1000;
+    recordCounter += 1;
   }
 
  
