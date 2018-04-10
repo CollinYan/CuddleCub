@@ -413,7 +413,7 @@ void loop() {
     Serial.println(sleepDelay);
     Serial.println(sleepMusic);
     Serial.println(F("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
-    musicOn(musicCounter , sleepDelay.toInt(), sleepMusic.toInt(),musicCounter.toInt()+60,false);
+    musicOn(musicCounter , sleepDelay.toInt(), sleepMusic.toInt(), sleepDelay.toInt()+60,false);
     musicCounter += 1;
   } else if (onm <= -1) {
     Serial.println(musicStartDelay);
