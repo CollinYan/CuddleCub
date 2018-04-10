@@ -323,12 +323,71 @@ void loop() {
         c[x] = (char) ble.read();
       }
       Serial.println(c);
+      //sleeptime, waketime, sleepcolor, wakecolor, sleepMusicIndex, wakeMusicIndex 
       //Serial.println("test");
-      String indicator = (String) c[0];
+      char sleepDelay[csize];
+      int x;
+      for (x = 0; x < csize; x++) {
+        if(c[x] != ' ')
+          sleepDelay[x] = c[x];
+        else
+        {
+          c++;
+          break;  
+        }
+      }
+      //wakedelay
+      for (; x < csize; x++) {
+        if(c[x] != ' ')
+        {
+          x = x;
+          //wakeDelay[x] = c[x];
+        }
+        else
+        {
+          c++;
+          break;  
+        }
+      }
+      //sleepcolor
+      for (; x < csize; x++) {
+        if(c[x] != ' ')
+        {
+          x = x;
+          //sleepColor[x] = c[x];
+        }
+        else
+        {
+          c++;
+          break;  
+        }
+      }
+      //wakecolor
+      for (; x < csize; x++) {
+        if(c[x] != ' ')
+        {
+          x=x;
+          //wakeColor[x] = c[x];
+        }
+        else
+        {
+          c++;
+          break;  
+        }
+      }
+      char sleepMusic[csize]
+      for (; x < csize; x++) {
+        if(c[x] != ' ')
+          sleepMusic[x] = c[x];
+        else
+        {
+          c++;
+          break;  
+        }
+      }
+      
       //Serial.println(indicator);
       int asdf = 0;
-      Serial.println(indicator);
-      if (indicator.equals("m")) {
       //Serial.println(F("music if statement"));
       parseCommand(c, csize, "m");
         if ((String) c[2] == "o" && (String) c[3] == "n") {
