@@ -30,7 +30,8 @@ long lightStartDelay;
 long lightEnd;
 long lightsCounter ;
 String color = "";
-
+String sleepDelay;
+String sleepMusic;
 
 int onm = -2;
 long musicStartDelay = -1;
@@ -124,7 +125,7 @@ void parseCommand(char c[], int csize, String decider) {
   }
 }
 
-void musicOn(long counter, long startDelay, long musicIndex, long endTime, boolean command) {
+void musicOn(long counter, int startDelay, int musicIndex, int endTime, boolean command) {
   //Serial.println(F("Music on function"));
   //printDetail(myDFPlayer.readType(), myDFPlayer.read());
   if (counter == startDelay) {
@@ -144,7 +145,7 @@ void musicOn(long counter, long startDelay, long musicIndex, long endTime, boole
   }
 }
 
-void musicOff(long counter, long startDelay, int index, boolean command) {
+void musicOff(long counter, int startDelay, int index, boolean command) {
   Serial.println(F("Music Off function"));
   if (counter == startDelay ) {
     Serial.println(F("Stopping Music"));
@@ -184,7 +185,7 @@ void SDtoBLE() {
   SD.remove("data.txt");
 }
 
-void lightsOn(long counter, long startDelay, long endTime, String color, boolean command) {
+void lightsOn(long counter, int startDelay, int endTime, String color, boolean command) {
   
   Serial.println(F("lights on function"));
   if (color.equals("r")) {
@@ -228,7 +229,7 @@ void lightsOn(long counter, long startDelay, long endTime, String color, boolean
   }
 }
 
-void lightsOff(long counter, long startDelay, String color, boolean command) {
+void lightsOff(long counter, int startDelay, String color, boolean command) {
   //Serial.println(F("lights off func"));
   strip.begin();
   if (counter == startDelay) {
@@ -244,7 +245,7 @@ void lightsOff(long counter, long startDelay, String color, boolean command) {
   }
 }
 
-void recordOn(long counter, long startDelay, long endTime, boolean command) {
+void recordOn(long counter, int startDelay, long endTime, boolean command) {
   if (counter == startDelay) {
     onr  = 1;
     recording = true;
@@ -254,7 +255,7 @@ void recordOn(long counter, long startDelay, long endTime, boolean command) {
   }
 }
 
-void recordOff(long counter, long startDelay, long endTime, boolean command) {
+void recordOff(long counter, int startDelay, long endTime, boolean command) {
   if (counter == startDelay) {
     onr = -2;
     recording = false;
@@ -325,11 +326,11 @@ void loop() {
       Serial.println(c);
       //sleeptime, waketime, sleepcolor, wakecolor, sleepMusicIndex, wakeMusicIndex 
       //Serial.println("test");
-      char sleepDelay[csize];
+      char sleepDelayc[csize];
       int x;
       for (x = 0; x < csize; x++) {
         if(c[x] != ' ')
-          sleepDelay[x] = c[x];
+          sleepDelayc[x] = c[x];
         else
         {
           x++;
@@ -375,10 +376,10 @@ void loop() {
           break;  
         }
       }
-      char sleepMusic[csize];
+      char sleepMusicc[csize];
       for (x=x; x < csize; x++) {
         if(c[x] != ' ')
-          sleepMusic[x] = c[x];
+          sleepMusicc[x] = c[x];
         else
         {
           x++;
@@ -389,7 +390,7 @@ void loop() {
       //Serial.println(indicator);
       int asdf = 0;
       //Serial.println(F("music if statement"));
-        if (((String)sleepDelay).toInt()>0) {
+        if (((String)sleepDelayc).toInt()>0) {
           onm = 1;
           on = 1;
         } else {
@@ -398,21 +399,8 @@ void loop() {
         }
         musicCounter = 0;
         lightsCounter = 0;
-
-    } else if (indicator.equals("s")) {
-      //Serial.println(F("Sending SD Card Data"));
-      SDtoBLE();
-    } else if (indicator.equals("r")) {
-      //Serial.println(F("recording if statement"));      
-        if ((String) c[2] == "o" && (String) c[3] == "n") {
-          parseCommand(c, csize, "r");
-          onr = 1;
-        } else {
-          parseCommand(c, csize, "r");
-          onr = -1;
-        }
-        recordCounter = 0;
-  }
+        sleepDelay = (String) sleepDelayc;
+        sleepMusic = (String) sleepMusicc;
 
   }
   if (recording) {
@@ -445,38 +433,15 @@ void loop() {
 
   
   if (onr == 1) {
-    recordOn(recordCounter, sleepDelay, recordEnd,false);
+    recordOn(recordCounter, sleepDelay.toInt(), recordEnd,false);
     recordCounter += 1;
   } else if (onr <= -1) {
-    recordOff(recordCounter, sleepDelay, recordEnd,false);
+    recordOff(recordCounter, sleepDelay.toInt(), recordEnd,false);
     recordCounter += 1;
   }
 
  
 
-  Serial.println("r");
-  Serial.println(onr);
-  Serial.println(recordStartDelay);
-  Serial.println(recordEnd);
-  Serial.println(recordCounter);
-  Serial.println();
-  
-  Serial.println("m");
-  Serial.println(musicStartDelay);
-  Serial.println(musicEnd);
-  Serial.println(musicCounter);
-  Serial.println(musicIndex);
-  Serial.println();
-
-  Serial.println();
-  Serial.println("l");
-  Serial.println(color);
-  Serial.println(lightStartDelay);
-  Serial.println(lightEnd);
-  Serial.println(lightsCounter);
-  Serial.println(on);
-  Serial.println();
- 
   
     
   Serial.println();
