@@ -389,26 +389,16 @@ void loop() {
       //Serial.println(indicator);
       int asdf = 0;
       //Serial.println(F("music if statement"));
-      parseCommand(c, csize, "m");
-        if ((String) c[2] == "o" && (String) c[3] == "n") {
-          Serial.println(c[2]); 
-          Serial.println(c[3]);
+        if (((String)sleepDelay).toInt()>0) {
           onm = 1;
-        } else {
-          onm = -1;
-        }
-        if (asdf == 0)
-        {musicCounter = 0;
-        asdf++;}
-    } 
-    if (indicator.equals("l")) {
-        parseCommand(c, csize, "l");
-        if ((String) c[2] == "o" && (String) c[3] == "n") {
           on = 1;
         } else {
+          onm = -1;
           on = -1;
         }
+        musicCounter = 0;
         lightsCounter = 0;
+
     } else if (indicator.equals("s")) {
       //Serial.println(F("Sending SD Card Data"));
       SDtoBLE();
@@ -432,33 +422,33 @@ void loop() {
   } 
 
   if (onm == 1) {
-    Serial.println(musicStartDelay);
-    Serial.println(musicIndex);
+    Serial.println(sleepDelay);
+    Serial.println(sleepMusic);
     Serial.println(F("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
-    musicOn(musicCounter , musicStartDelay, musicIndex,musicEnd,false);
+    musicOn(musicCounter , sleepDelay, sleepMusic,musicCounter+60,false);
     musicCounter += 1;
   } else if (onm <= -1) {
     Serial.println(musicStartDelay);
-    musicOff(musicCounter, musicStartDelay, musicIndex,false);
+    musicOff(musicCounter, sleepDelay, sleepMusic,false);
     musicCounter += 1;
   }
 
 
   if (on == 1) {
-    lightsOn(lightsCounter,lightStartDelay, lightEnd, color,false);
+    lightsOn(lightsCounter,sleepDelay, sleepDelay+60, color,false);
     lightsCounter += 1;
   } else if (on <= -1) {
-    lightsOff(lightsCounter, lightStartDelay, color,false);
+    lightsOff(lightsCounter, sleepDelay, color,false);
     lightsCounter += 1;
   }
   
 
   
   if (onr == 1) {
-    recordOn(recordCounter, recordStartDelay, recordEnd,false);
+    recordOn(recordCounter, sleepDelay, recordEnd,false);
     recordCounter += 1;
   } else if (onr <= -1) {
-    recordOff(recordCounter, recordStartDelay, recordEnd,false);
+    recordOff(recordCounter, sleepDelay, recordEnd,false);
     recordCounter += 1;
   }
 
