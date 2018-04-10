@@ -332,12 +332,12 @@ void loop() {
           sleepDelay[x] = c[x];
         else
         {
-          c++;
+          x++;
           break;  
         }
       }
       //wakedelay
-      for (; x < csize; x++) {
+      for (x =x; x < csize; x++) {
         if(c[x] != ' ')
         {
           x = x;
@@ -345,12 +345,12 @@ void loop() {
         }
         else
         {
-          c++;
+          x++;
           break;  
         }
       }
       //sleepcolor
-      for (; x < csize; x++) {
+      for (x=x; x < csize; x++) {
         if(c[x] != ' ')
         {
           x = x;
@@ -358,12 +358,12 @@ void loop() {
         }
         else
         {
-          c++;
+          x++;
           break;  
         }
       }
       //wakecolor
-      for (; x < csize; x++) {
+      for (x=x; x < csize; x++) {
         if(c[x] != ' ')
         {
           x=x;
@@ -371,17 +371,17 @@ void loop() {
         }
         else
         {
-          c++;
+          x++;
           break;  
         }
       }
-      char sleepMusic[csize]
-      for (; x < csize; x++) {
+      char sleepMusic[csize];
+      for (x=x; x < csize; x++) {
         if(c[x] != ' ')
           sleepMusic[x] = c[x];
         else
         {
-          c++;
+          x++;
           break;  
         }
       }
@@ -419,26 +419,26 @@ void loop() {
     Serial.println(F("recording"));
     recordHelper();
     
-  } 
+  }
 
   if (onm == 1) {
     Serial.println(sleepDelay);
     Serial.println(sleepMusic);
     Serial.println(F("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
-    musicOn(musicCounter , sleepDelay, sleepMusic,musicCounter+60,false);
+    musicOn(musicCounter , sleepDelay.toInt(), sleepMusic.toInt(),musicCounter.toInt()+60,false);
     musicCounter += 1;
   } else if (onm <= -1) {
     Serial.println(musicStartDelay);
-    musicOff(musicCounter, sleepDelay, sleepMusic,false);
+    musicOff(musicCounter, sleepDelay.toInt(), sleepMusic,false);
     musicCounter += 1;
   }
 
 
   if (on == 1) {
-    lightsOn(lightsCounter,sleepDelay, sleepDelay+60, color,false);
+    lightsOn(lightsCounter,sleepDelay.toInt(), sleepDelay.toInt()+60, color,false);
     lightsCounter += 1;
   } else if (on <= -1) {
-    lightsOff(lightsCounter, sleepDelay, color,false);
+    lightsOff(lightsCounter, sleepDelay.toInt(), color,false);
     lightsCounter += 1;
   }
   
