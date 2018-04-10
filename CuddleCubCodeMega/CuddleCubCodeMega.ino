@@ -413,7 +413,7 @@ void loop() {
     Serial.println(sleepDelay);
     Serial.println(sleepMusic);
     Serial.println(F("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
-    musicOn(musicCounter , sleepDelay.toInt(), sleepMusic.toInt(), sleepDelay.toInt()+60,false);
+    musicOn(musicCounter , sleepDelay.toInt(), sleepMusic.toInt(), sleepDelay.toInt()+10,false);
     musicCounter += 1;
   } else if (onm <= -1) {
     Serial.println(musicStartDelay);
@@ -423,7 +423,7 @@ void loop() {
 
 
   if (on == 1) {
-    lightsOn(lightsCounter,sleepDelay.toInt(), sleepDelay.toInt()+60, color,false);
+    lightsOn(lightsCounter,sleepDelay.toInt(), sleepDelay.toInt()+10, color,false);
     lightsCounter += 1;
   } else if (on <= -1) {
     lightsOff(lightsCounter, sleepDelay.toInt(), color,false);
@@ -432,7 +432,7 @@ void loop() {
   
 
   
-  if (onr == 1) {
+  if (on == 1) {
     recordOn(recordCounter, sleepDelay.toInt(), recordEnd,false);
     recordCounter += 1;
   } else if (onr <= -1) {
