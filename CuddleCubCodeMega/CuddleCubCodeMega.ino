@@ -30,6 +30,7 @@ long lightStartDelay;
 long lightEnd;
 long lightsCounter ;
 String color = "";
+String wcolor = "";
 String sleepDelay;
 String sleepMusic;
 
@@ -232,7 +233,7 @@ void lightsOn(long counter, int startDelay, int endTime, String color, boolean c
 void lightsOff(long counter, int startDelay, String color, boolean command) {
   //Serial.println(F("lights off func"));
   strip.begin();
-  if (counter == startDelay) {
+  if (counter >= startDelay) {
     
     for (int i = 0; i < numberOfLights; i++) {
       strip.setPixelColor(i, 0, 0, 0);
@@ -264,7 +265,7 @@ void recordOff(long counter, int startDelay, long endTime, boolean command) {
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
   //Serial.println();
   strip.begin();
   strip.show();
@@ -324,65 +325,88 @@ void loop() {
         c[x] = (char) ble.read();
       }
       Serial.println(c);
+      Serial.println("!!!!");
       //sleeptime, waketime, sleepcolor, wakecolor, sleepMusicIndex, wakeMusicIndex 
       //Serial.println("test");
       char sleepDelayc[csize];
       int x;
+      int aaa =0;
+      int bbb =0;
+      int ccc =0;
+      int ddd =0;
       for (x = 0; x < csize; x++) {
-        if(c[x] != ' ')
+        if(c[x] != ' '){
           sleepDelayc[x] = c[x];
+          Serial.println(c[x]);
+        }
         else
         {
+          Serial.println("sleepdelay");
           x++;
           break;  
         }
       }
+      sleepDelayc[x] = '\0';
       //wakedelay
       for (x =x; x < csize; x++) {
         if(c[x] != ' ')
         {
           x = x;
-          //wakeDelay[x] = c[x];
+          Serial.println(c[x]);
+          //wakeDelay[aaa] = c[x];
+          aaa++;
         }
         else
         {
+          Serial.println("wd");
           x++;
           break;  
         }
       }
       //sleepcolor
+      char sleepColor[csize];
       for (x=x; x < csize; x++) {
         if(c[x] != ' ')
         {
           x = x;
-          //sleepColor[x] = c[x];
+          Serial.println(c[x]);
+          sleepColor[bbb] = c[x];
+          bbb++;
         }
         else
         {
           x++;
+          Serial.println("sc");
           break;  
         }
       }
       //wakecolor
+      char wakeColor[csize];
       for (x=x; x < csize; x++) {
         if(c[x] != ' ')
         {
-          x=x;
-          //wakeColor[x] = c[x];
+          wakeColor[ccc] = c[x];
+          Serial.println(c[x]);
+          ccc++;
         }
         else
         {
           x++;
+          Serial.println("wc");
           break;  
         }
       }
       char sleepMusicc[csize];
       for (x=x; x < csize; x++) {
-        if(c[x] != ' ')
-          sleepMusicc[x] = c[x];
+        if(c[x] != ' '){
+          sleepMusicc[ddd] = c[x];
+          Serial.println(c[x]);
+          ddd++;
+        }
         else
         {
           x++;
+          Serial.println("sm");
           break;  
         }
       }
@@ -397,10 +421,15 @@ void loop() {
           onm = -1;
           on = -1;
         }
+        color = (String) sleepColor;
+        wcolor = (String) wakeColor;
+        Serial.println(color);
+        Serial.println(wcolor);
         musicCounter = 0;
         lightsCounter = 0;
         sleepDelay = (String) sleepDelayc;
         sleepMusic = (String) sleepMusicc;
+        Serial.println(sleepMusic);
 
   }
   if (recording) {
@@ -414,29 +443,30 @@ void loop() {
     Serial.println(sleepMusic);
     Serial.println(F("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
     musicOn(musicCounter , sleepDelay.toInt(), sleepMusic.toInt(), sleepDelay.toInt()+10,false);
+    lightsOn(musicCounter,sleepDelay.toInt(), sleepDelay.toInt()+10, "r" ,false);
     musicCounter += 1;
   } else if (onm <= -1) {
     Serial.println(musicStartDelay);
     musicOff(musicCounter, sleepDelay.toInt(), sleepMusic.toInt(),false);
+    lightsOff(musicCounter, sleepDelay.toInt(), color,false);
+    if(sleepDelay.toInt() > -1 && musicCounter>=sleepDelay.toInt()+10)
+    {
+      musicCounter -= 86400;
+      Serial.println(musicCounter);
+      onm = 1;
+    }
     musicCounter += 1;
   }
 
 
-  if (on == 1) {
-    lightsOn(lightsCounter,sleepDelay.toInt(), sleepDelay.toInt()+10, color,false);
-    lightsCounter += 1;
-  } else if (on <= -1) {
-    lightsOff(lightsCounter, sleepDelay.toInt(), color,false);
-    lightsCounter += 1;
-  }
   
 
   
-  if (on == 1) {
-    recordOn(recordCounter, sleepDelay.toInt(), recordEnd,false);
+  if (onm == 1) {
+    recordOn(musicCounter, sleepDelay.toInt(), recordEnd,false);
     recordCounter += 1;
-  } else if (onr <= -1) {
-    recordOff(recordCounter, sleepDelay.toInt(), recordEnd,false);
+  } else if (onm <= -1) {
+    recordOff(musicCounter, sleepDelay.toInt(), recordEnd,false);
     recordCounter += 1;
   }
 
